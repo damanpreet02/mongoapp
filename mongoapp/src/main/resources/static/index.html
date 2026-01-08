@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+		<div
+			style="display: flex; justify-content: space-between; align-items: center;">
+			<h2>User Management</h2>
+			<button id="logoutBtn" onclick="logout()" style="background: red;">Logout</button>
+		</div>
+
+		<h2>User Management</h2>
+
+    <div class="form">
+        <input type="hidden" id="userId">
+        <input id="name" placeholder="Enter full name">
+        <input id="email" placeholder="Enter email">
+        <button onclick="saveUser()">Save</button>
+    </div>
+
+    <input class="search" id="search" placeholder="Search by name..." onkeyup="loadUsers()">
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="userTable"></tbody>
+    </table>
+
+</div>
+
+<script>
+let editingId = "";
+
+function saveUser() {
+    let name = document.getElementById("name").value;
+    let email = document.getElementById("email").value;
+
+    if (!name || !email) {
+        alert("Please enter name and email");
+        return;
+    }
+
+    let user = { name, email };
+
+    if (editingId === "") {
+        fetch("/users", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(user)
+        }).then(loadUsers);
+    } else {
+        fetch("/users/" + editingId, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(user)
+        }).then(() => {
+            editingId = "";
+            loadUsers();
+        });
+    }
+
+    document.getElementById("name").value = "";
+    document.getElementById("email").value = "";
+}
+
+function loadUsers() {
+    fetch("/users")
+        .then(res => res.json())
+        .then(data => {
+            let keyword = document.getElementById("search").value.toLowerCase();
+            let rows = "";
+
+            data.filter(u => u.name.toLowerCase().includes(keyword))
+                .forEach(u => {
+                    rows += `<tr>
+                        <td>${u.name}</td>
+                        <td>${u.email}</td>
+                        <td>
+                            <button class="edit" onclick="editUser('${u.id}','${u.name}','${u.email}')">Edit</button>
+                            <button class="delete" onclick="deleteUser('${u.id}')">Delete</button>
+                        </td>
+                    </tr>`;
+                });
+
+            document.getElementById("userTable").innerHTML = rows;
+        });
+}
+
+function deleteUser(id) {
+    fetch("/users/" + id, { method: "DELETE" })
+        .then(loadUsers);
+}
+
+function editUser(id, name, email) {
+    editingId = id;
+    document.getElementById("name").value = name;
+    document.getElementById("email").value = email;
+}
+
+loadUsers();
+
+function logout() {
+    localStorage.removeItem("loggedIn");
+    window.location.href = "login.html";
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+body {
+    background: linear-gradient(120deg, #2980b9, #6dd5fa);
+    font-family: 'Segoe UI', sans-serif;
+    padding: 40px;
+}
+
+.app {
+    background: white;
+    max-width: 700px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form {
+    display: flex;
+    gap: 10px;
+}
+
+.form input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.form button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form button:hover {
+    background: #2980b9;
+}
+
+.search {
+    width: 100%;
+    margin: 15px 0;
+    padding: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.edit {
+    background: orange;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.delete {
+    background: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
